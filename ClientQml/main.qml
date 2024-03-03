@@ -1,9 +1,8 @@
 import QtQuick
 import QtWebSockets
 
-Window {
-    width: 640
-    height: 480
-    visible: true
-    title: qsTr("Hello World")
+WebSocket {
+        id: ws
+        url: "ws://127.0.0.1:8080"
+        active: true
 }

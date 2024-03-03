@@ -1,4 +1,4 @@
-QT += quick
+QT += quick websockets
 
 SOURCES += \
         main.cpp
