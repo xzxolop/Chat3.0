@@ -1,9 +1,9 @@
-import { WebSocketServer } from 'ws';
+const ws = require('ws');
 
 var port = 8080;
 var ip = '127.0.0.1';
 
-const wss = new WebSocketServer({
+const wss = new ws.WebSocketServer({
     port: port, 
     host: ip,
 });
@@ -15,13 +15,15 @@ wss.on('connection', (ws) => {
     
     ws.on('message', (mes) => {
         console.log(mes);
+        ws.send(mes.toString());
     });
+   ws.send('Welcome! You connected.');
 
-    ws.on('message', function message(data) {
-        console.log('received: %s', data);
-    });
-    
-    ws.send('something');
+   ws.on('close', () => {
+    console.log('Client disconnect');
+   });
 });
+
+
 
 
