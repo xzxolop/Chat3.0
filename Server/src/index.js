@@ -20,7 +20,7 @@ wss.on('connection', (ws) => {
    ws.send('Welcome! You connected.');
 
    ws.on('close', () => {
-    console.log('Client disconnect');
+    console.log('Client disconnected');
    });
 });
 
