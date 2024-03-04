@@ -38,7 +38,7 @@ Window {
             }
         }
 
-        TextField {
+        TextArea {
             id: chat
             width: 200
             height: 250
