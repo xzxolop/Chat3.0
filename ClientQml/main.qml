@@ -13,44 +13,25 @@ Window {
         active: false
     }
 
-    ListModel {
-        id: buttonModel
-
-        ListElement {
-            color: "green"
-            text: "connect"
-            con: function() {
-                ws.active = true;
-                console.log("connect");
-            }
-        }
-
-        ListElement {
-            color: "red"
-            text: "disconnect"
-            con: function() {
-                ws.active = false;
-                console.log("disconnect");
-            }
-        }
-    }
-
-    ListView {
-        id: view
+    Page {
         anchors.fill: parent
-        model: buttonModel
-
-        delegate: Button {
+        Button {
             width: 100
-            height: 50
-            text: model.text
-            onClicked: model.con()
+            height: 40
+            text: "Connect"
+            x: 50
+            y: 30
 
-            Rectangle{
-                anchors.fill: parent
-                color: model.color // Если написать buttonModel вместо model, то не окрасится поч?
-
+            onClicked: {
+                ws.active = !ws.active
+                if(text === "Connect")
+                    text = "Disconnect"
+                else {
+                    text = "Connect"
+                }
             }
         }
+
+
     }
 }
