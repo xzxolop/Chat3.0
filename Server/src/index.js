@@ -14,10 +14,10 @@ wss.on('connection', (ws) => {
     console.log('client connected');
     
     ws.on('message', (mes) => {
-        console.log(mes);
+        console.log(mes.toString());
         ws.send(mes.toString());
     });
-   ws.send('Welcome! You connected.');
+   ws.send('Welcome! You are connect.');
 
    ws.on('close', () => {
     console.log('Client disconnected');
