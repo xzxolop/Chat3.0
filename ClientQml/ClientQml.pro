@@ -7,6 +7,9 @@ resources.files = main.qml
 resources.prefix = /$${TARGET}
 RESOURCES += resources
 
+DESTDIR = ../Deploy
+QMAKE_POST_LINK += $$(QTDIR)/bin/windeployqt $$DESTDIR --qmldir $$OUT_PWD/../$$QMAKE_PROJECT_NAME
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
