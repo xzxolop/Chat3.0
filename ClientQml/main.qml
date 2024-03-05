@@ -24,16 +24,16 @@ Window {
             id: connect
             width: 100
             height: 40
-            text: "Connect"
+            text: qsTr("Connect")
             x: 50
             y: 30
 
             onClicked: {
                 ws.active = !ws.active
-                if(text === "Connect")
-                    text = "Disconnect"
+                if(text === qsTr("Connect"))
+                    text = qsTr("Disconnect")
                 else {
-                    text = "Connect"
+                    text = qsTr("Connect")
                 }
             }
         }
@@ -56,7 +56,7 @@ Window {
 
         Button {
             id: send
-            text: "Send"
+            text: qsTr("Send")
             x: writeMes.x + writeMes.width + 10
             y: writeMes.y
             width: 50
