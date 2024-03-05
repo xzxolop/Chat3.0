@@ -22,7 +22,7 @@ Window {
         }
 
         onTextMessageReceived: {
-            chat.text += "\n" + message + ' ' + clientId
+            chat.text += "\n" + message
         }
     }
 
