@@ -11,15 +11,25 @@ Window {
         id: ws
         url: "ws://127.0.0.1:8080"
         active: false
+        property string clientId: "0"
+
+        onBinaryMessageReceived: {
+            var data = JSON.parse(message);
+            console.log(data.toString());
+            if (data.type === 'ban') {
+                ws.clientId = data.data;
+            }
+        }
 
         onTextMessageReceived: {
-            chat.text += "\n" + message
-
+            chat.text += "\n" + message + ' ' + clientId
         }
     }
 
     Page {
         anchors.fill: parent
+
+        // Connect button
         Button {
             id: connect
             width: 100
@@ -54,6 +64,7 @@ Window {
             y: chat.y + chat.height + 3
         }
 
+
         Button {
             id: send
             text: qsTr("Send")
@@ -62,9 +73,15 @@ Window {
             width: 50
             height: writeMes.height
 
+            // Send message function
             onClicked: {
+                var message = {
+                    text: writeMes.text
+
+                }
+
                 ws.sendTextMessage(writeMes.text)
-                writeMes.cl()
+                writeMes.clear()
             }
         }
 
