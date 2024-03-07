@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtWebSockets
 
 Window {
-    width: 350
+    width: 400
     height: 450
     visible: true
 
@@ -16,7 +16,7 @@ Window {
         onBinaryMessageReceived: {
             var data = JSON.parse(message);
             console.log(data.toString());
-            if (data.type === 'ban') {
+            if (data.type === 'connect') {
                 ws.clientId = data.data;
             }
         }
@@ -50,11 +50,12 @@ Window {
 
         TextArea {
             id: chat
-            width: 200
+            width: 250
             height: 250
             x: connect.x
             y: connect.y + connect.height + 30
             wrapMode: Text.Wrap
+            readOnly: true
         }
 
         TextField {

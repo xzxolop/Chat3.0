@@ -14,11 +14,11 @@ console.log('Server is open on: ', ip, port);
 wss.on('connection', (ws) => {
     // connect
     var id = (Math.floor(Math.random() * 1000)).toString();
-    ws.send(Buffer.from(JSON.stringify({type: 'ban', data: id})));
+    ws.send(Buffer.from(JSON.stringify({type: 'connect', data: id})));
     clients[id] = ws;
 
-    console.log('client connected' + id);
-    ws.send('Welcome! You are connect with id:' + id);
+    console.log('Client connected' + id);
+    ws.send('Welcome! You are connect with id: ' + id); // пока отправляем только одному клиенту
     
     // recv
     ws.on('message', (mes) => {
@@ -32,8 +32,8 @@ wss.on('connection', (ws) => {
     // disconnect
     ws.on('close', (ws) => {
     console.log('Client disconnected: ' + id); 
+
     delete clients[id]; 
-    //console.log('Client disconnected');
    });
 });
 
