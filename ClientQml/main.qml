@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtWebSockets
 
 Window {
-    width: 400
+    width: 600
     height: 450
     visible: true
 
@@ -11,13 +11,18 @@ Window {
         id: ws
         url: "ws://127.0.0.1:8080"
         active: false
-        property string clientId: "0"
+        property string myId: "0"
 
         onBinaryMessageReceived: {
             var data = JSON.parse(message);
             console.log(data.toString());
+
             if (data.type === 'connect') {
-                ws.clientId = data.data;
+                ws.myId = data.data;
+            }
+
+            else if(data.type === 'message') {
+                chat.text += '\n' + data.sendBy + ': ' + data.text;
             }
         }
 
@@ -50,7 +55,7 @@ Window {
 
         TextArea {
             id: chat
-            width: 250
+            width: 450
             height: 250
             x: connect.x
             y: connect.y + connect.height + 30
@@ -67,7 +72,6 @@ Window {
             wrapMode: Text.Wrap
         }
 
-
         Button {
             id: send
             text: qsTr("Send")
@@ -79,14 +83,14 @@ Window {
             // Send message function
             onClicked: {
                 var message = {
-                    text: writeMes.text
-
+                    type: "message",
+                    text: writeMes.text,
+                    sendBy: ws.myId
                 }
 
-                ws.sendTextMessage(writeMes.text)
+                ws.sendTextMessage(JSON.stringify(message))
                 writeMes.clear()
             }
         }
-
     }
 }

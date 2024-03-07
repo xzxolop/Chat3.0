@@ -25,7 +25,7 @@ wss.on('connection', (ws) => {
         console.log(mes.toString());
         
         for(key in clients) {
-            clients[key].send(id.toString() + ": " + mes);
+            clients[key].send(mes);
         }
     });
 
