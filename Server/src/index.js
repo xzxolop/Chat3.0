@@ -17,25 +17,23 @@ wss.on('connection', (ws) => {
     ws.send(Buffer.from(JSON.stringify({type: 'ban', data: id})));
     clients[id] = ws;
 
-    console.log('client connected');
-    ws.send('Welcome! You are connect.');
+    console.log('client connected' + id);
+    ws.send('Welcome! You are connect with id:' + id);
     
     // recv
     ws.on('message', (mes) => {
         console.log(mes.toString());
         
-        Object.values(clients).forEach(client => client.send(id.toString() + ": " + mes.toString()));
-        
-        // why this not work?
-        //clients.forEach(element => {
-        //    element.send(mes.toString());
-        //});
-        
+        for(key in clients) {
+            clients[key].send(id.toString() + ": " + mes);
+        }
     });
 
     // disconnect
-    ws.on('close', () => {
-    console.log('Client disconnected');
+    ws.on('close', (ws) => {
+    console.log('Client disconnected: ' + id); 
+    delete clients[id]; 
+    //console.log('Client disconnected');
    });
 });
 

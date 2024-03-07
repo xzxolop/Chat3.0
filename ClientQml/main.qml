@@ -54,6 +54,7 @@ Window {
             height: 250
             x: connect.x
             y: connect.y + connect.height + 30
+            wrapMode: Text.Wrap
         }
 
         TextField {
@@ -62,6 +63,7 @@ Window {
             height: 50
             x: chat.x
             y: chat.y + chat.height + 3
+            wrapMode: Text.Wrap
         }
 
 
