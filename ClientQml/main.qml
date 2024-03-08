@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebSockets
 
+
 Window {
     width: 600
     height: 450
@@ -12,27 +13,39 @@ Window {
         url: "ws://127.0.0.1:8080"
         active: false
         property string myId: "0"
+        property var messages: []
 
         onBinaryMessageReceived: {
             var data = JSON.parse(message);
-            console.log(data.toString());
 
             if (data.type === 'connect') {
                 ws.myId = data.data;
             }
 
             else if(data.type === 'message') {
-                chat.text += '\n' + data.sendBy + ': ' + data.text;
+                var newMsg = {
+                    sendBy: data.sendBy,
+                    text: data.text
+                }
+                myModel.append(newMsg)
+                viewMessage.model = myModel
             }
         }
 
+        // тут приходит приветственное сообщение при подключении (в будущем стоит переместить всё в onBinaryRecvMes)
         onTextMessageReceived: {
-            chat.text += "\n" + message
+            var newMsg = { text: message }
+            myModel.append(newMsg)
+            viewMessage.model = myModel
         }
     }
 
     Page {
+        id: page
         anchors.fill: parent
+
+        readonly property int margin: 10
+
 
         // Connect button
         Button {
@@ -61,6 +74,40 @@ Window {
             y: connect.y + connect.height + 30
             wrapMode: Text.Wrap
             readOnly: true
+
+            ListView {
+                id: viewMessage
+                anchors.fill: parent
+                spacing: page.margin
+                ScrollBar.vertical: ScrollBar{}
+
+                model: myModel
+                delegate: Rectangle {
+                    height: 40
+                    width: viewMessage.width-100
+                    color: model.sendBy === ws.myId ? 'green' : 'red'
+                    border.color: 'black'
+                    x: 100
+
+                    Text {
+                        text: 'id: ' + model.sendBy
+                    }
+
+                    Text {
+                        y: 15
+                        text: model.text
+                    }
+                }
+            }
+
+            ListModel {
+                id: myModel
+
+                ListElement {
+                    text: 'ban'
+                    sendBy: '128'
+                }
+            }
         }
 
         TextField {
