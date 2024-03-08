@@ -87,7 +87,8 @@ Window {
                     property bool isMyMessage: model.sendBy === ws.myId
                     color: isMyMessage ? 'green' : 'red'
                     border.color: 'black'
-
+                    anchors.left: isMyMessage ? undefined : parent.left
+                    anchors.right: isMyMessage ? parent.right : undefined
 
                     Label {
                         text: 'id: ' + model.sendBy
