@@ -66,14 +66,13 @@ Window {
             }
         }
 
-        TextArea {
+        Label {
             id: chat
             width: 450
             height: 250
             x: connect.x
             y: connect.y + connect.height + 30
             wrapMode: Text.Wrap
-            readOnly: true
 
             ListView {
                 id: viewMessage
@@ -88,13 +87,13 @@ Window {
                     property bool isMyMessage: model.sendBy === ws.myId
                     color: isMyMessage ? 'green' : 'red'
                     border.color: 'black'
-                    x: 100
 
-                    Text {
+
+                    Label {
                         text: 'id: ' + model.sendBy
                     }
 
-                    Text {
+                    Label {
                         y: 15
                         text: model.text
                     }
