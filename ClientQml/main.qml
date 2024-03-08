@@ -43,9 +43,16 @@ Window {
     Page {
         id: page
         anchors.fill: parent
-
         readonly property int margin: 10
+        readonly property color panelColor: "#212121"
+        readonly property color myMessageColor: "#8774e1"
+        readonly property color serverMessageColor: "#212121"
+        readonly property color bgColor: "#0E1621"
+        readonly property color textColor: "white"
 
+        background: Rectangle {
+            color: page.bgColor
+        }
 
         // Connect button
         Button {
@@ -55,6 +62,10 @@ Window {
             text: qsTr("Connect")
             x: 50
             y: 30
+
+            background: Rectangle {
+                color: page.myMessageColor
+            }
 
             onClicked: {
                 ws.active = !ws.active
@@ -68,8 +79,8 @@ Window {
 
         Label {
             id: chat
-            width: 450
-            height: 250
+            width: 500
+            height: 320
             x: connect.x
             y: connect.y + connect.height + 30
             wrapMode: Text.Wrap
@@ -78,25 +89,31 @@ Window {
                 id: viewMessage
                 anchors.fill: parent
                 spacing: page.margin
-                ScrollBar.vertical: ScrollBar{}
+                ScrollBar.vertical: ScrollBar {
+                    opacity: 0
+                }
 
                 model: myModel
                 delegate: Rectangle {
                     height: 40
-                    width: viewMessage.width-100
-                    property bool isMyMessage: model.sendBy === ws.myId
-                    color: isMyMessage ? 'green' : 'red'
-                    border.color: 'black'
+                    width: viewMessage.width-150
                     anchors.left: isMyMessage ? undefined : parent.left
                     anchors.right: isMyMessage ? parent.right : undefined
+                    radius: 10
+                    color: isMyMessage ? page.myMessageColor : page.serverMessageColor
+                    property bool isMyMessage: model.sendBy === ws.myId
 
                     Label {
                         text: 'id: ' + model.sendBy
+                        color: page.textColor
+                        x: 10
                     }
 
                     Label {
                         y: 15
+                        x: 10
                         text: model.text
+                        color: page.textColor
                     }
                 }
             }
@@ -113,11 +130,17 @@ Window {
 
         TextField {
             id: writeMes
-            width: chat.width
+            width: chat.width - 100
             height: 50
-            x: chat.x
-            y: chat.y + chat.height + 3
+            x: chat.x + 20
+            y: chat.y + chat.height - 75
             wrapMode: Text.Wrap
+
+            background: Rectangle {
+                color: page.panelColor
+            }
+
+            color: page.textColor
         }
 
         Button {
@@ -127,6 +150,10 @@ Window {
             y: writeMes.y
             width: 50
             height: writeMes.height
+
+            background: Rectangle {
+                color: page.myMessageColor
+            }
 
             // Send message function
             onClicked: {
