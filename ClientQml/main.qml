@@ -85,7 +85,8 @@ Window {
                 delegate: Rectangle {
                     height: 40
                     width: viewMessage.width-100
-                    color: model.sendBy === ws.myId ? 'green' : 'red'
+                    property bool isMyMessage: model.sendBy === ws.myId
+                    color: isMyMessage ? 'green' : 'red'
                     border.color: 'black'
                     x: 100
 
