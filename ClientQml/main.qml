@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtWebSockets
+import QtWebSockets 1.6
 
 
 Window {
@@ -28,7 +28,6 @@ Window {
                     text: data.text
                 }
                 myModel.append(newMsg)
-                viewMessage.model = myModel
             }
         }
 
