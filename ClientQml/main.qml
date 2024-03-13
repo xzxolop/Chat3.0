@@ -4,16 +4,17 @@ import QtWebSockets 1.6
 
 
 Window {
+    id: app
     width: 600
     height: 450
     visible: true
 
     WebSocket {
         id: ws
-        url: "ws://127.0.0.1:8080"
-        active: false
         property string myId: "0"
         property var messages: []
+        url: "ws://127.0.0.1:8080"
+        active: false
 
         onBinaryMessageReceived: {
             var data = JSON.parse(message);
@@ -56,11 +57,11 @@ Window {
         // Connect button
         Button {
             id: connect
+            x: 50
+            y: 30
             width: 100
             height: 40
             text: qsTr("Connect")
-            x: 50
-            y: 30
 
             background: Rectangle {
                 color: page.myMessageColor
@@ -97,16 +98,16 @@ Window {
                     property bool isMyMessage: model.sendBy === ws.myId
 
                     Label {
-                        text: 'id: ' + model.sendBy
-                        color: page.textColor
                         x: 10
+                        color: page.textColor
+                        text: 'id: ' + model.sendBy
                     }
 
                     Label {
-                        y: 15
                         x: 10
-                        text: model.text
+                        y: 15
                         color: page.textColor
+                        text: model.text
                     }
                 }
             }
@@ -130,9 +131,9 @@ Window {
 
                 Button {
                     id: send
-                    text: qsTr("Send")
                     width: 50
                     height: writeMes.height
+                    text: qsTr("Send")
 
                     background: Rectangle {
                         color: page.myMessageColor
