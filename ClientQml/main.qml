@@ -4,13 +4,13 @@ import QtWebSockets 1.6
 
 
 Window {
-    id: app
+    id: _app
     width: 600
     height: 450
     visible: true
 
     WebSocket {
-        id: ws
+        id: _ws
         property string myId: "0"
         property var messages: []
         url: "ws://127.0.0.1:8080"
@@ -20,7 +20,7 @@ Window {
             var data = JSON.parse(message);
 
             if (data.type === 'connect') {
-                ws.myId = data.data;
+                _ws.myId = data.data;
             }
 
             else if(data.type === 'message') {
@@ -28,20 +28,20 @@ Window {
                     sendBy: data.sendBy,
                     text: data.text
                 }
-                myModel.append(newMsg)
+                _messageModel.append(newMsg)
             }
         }
 
         // тут приходит приветственное сообщение при подключении (в будущем стоит переместить всё в onBinaryRecvMes)
         onTextMessageReceived: {
             var newMsg = { text: message }
-            myModel.append(newMsg)
-            viewMessage.model = myModel
+            _messageModel.append(newMsg)
+            viewMessage.model = _messageModel
         }
     }
 
     Page {
-        id: page
+        id: _page
         anchors.fill: parent
         readonly property int margin: 10
         readonly property color panelColor: "#212121"
@@ -51,12 +51,12 @@ Window {
         readonly property color textColor: "white"
 
         background: Rectangle {
-            color: page.bgColor
+            color: _page.bgColor
         }
 
         // Connect button
         Button {
-            id: connect
+            id: _connect
             x: 50
             y: 30
             width: 100
@@ -64,11 +64,11 @@ Window {
             text: qsTr("Connect")
 
             background: Rectangle {
-                color: page.myMessageColor
+                color: _page.myMessageColor
             }
 
             onClicked: {
-                ws.active = !ws.active
+                _ws.active = !_ws.active
                 if(text === qsTr("Connect"))
                     text = qsTr("Disconnect")
                 else {
@@ -78,15 +78,15 @@ Window {
         }
 
         Column {
-            x: connect.x
-            y: connect.y + connect.height + 30
+            x: _connect.x
+            y: _connect.y + _connect.height + 30
 
             ListView {
                 id: viewMessage
-                width: writeMes.x + writeMes.width
+                width: _writeMes.x + _writeMes.width
                 height: 280
-                spacing: page.margin
-                model: myModel
+                spacing: _page.margin
+                model: _messageModel
 
                 delegate: Rectangle {
                     height: 40
@@ -94,19 +94,19 @@ Window {
                     anchors.left: isMyMessage ? undefined : parent.left
                     anchors.right: isMyMessage ? parent.right : undefined
                     radius: 10
-                    color: isMyMessage ? page.myMessageColor : page.serverMessageColor
-                    property bool isMyMessage: model.sendBy === ws.myId
+                    color: isMyMessage ? _page.myMessageColor : _page.serverMessageColor
+                    property bool isMyMessage: model.sendBy === _ws.myId
 
                     Label {
                         x: 10
-                        color: page.textColor
+                        color: _page.textColor
                         text: 'id: ' + model.sendBy
                     }
 
                     Label {
                         x: 10
                         y: 15
-                        color: page.textColor
+                        color: _page.textColor
                         text: model.text
                     }
                 }
@@ -117,45 +117,45 @@ Window {
                 spacing: 5
 
                 TextField {
-                    id: writeMes
-                    width: page.width - 200
+                    id: _writeMes
+                    width: _page.width - 200
                     height: 50
                     wrapMode: Text.Wrap
 
                     background: Rectangle {
-                        color: page.panelColor
+                        color: _page.panelColor
                     }
 
-                    color: page.textColor
+                    color: _page.textColor
                 }
 
                 Button {
-                    id: send
+                    id: _send
                     width: 50
-                    height: writeMes.height
+                    height: _writeMes.height
                     text: qsTr("Send")
 
                     background: Rectangle {
-                        color: page.myMessageColor
+                        color: _page.myMessageColor
                     }
 
                     // Send message function
                     onClicked: {
                         var message = {
                             type: "message",
-                            text: writeMes.text,
-                            sendBy: ws.myId
+                            text: _writeMes.text,
+                            sendBy: _ws.myId
                         }
 
-                        ws.sendTextMessage(JSON.stringify(message))
-                        writeMes.clear()
+                        _ws.sendTextMessage(JSON.stringify(message))
+                        _writeMes.clear()
                     }
                 }
             }
         }
 
         ListModel {
-            id: myModel
+            id: _messageModel
 
             ListElement {
                 text: 'ban'
