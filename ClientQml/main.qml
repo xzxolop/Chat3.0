@@ -81,7 +81,7 @@ Window {
             x: connect.x
             y: connect.y + connect.height + 30
             width: 500
-            height: 320
+            height: 280
             spacing: page.margin
             ScrollBar.vertical: ScrollBar {
                 opacity: 0
@@ -93,6 +93,7 @@ Window {
                 width: viewMessage.width-150
                 anchors.left: isMyMessage ? undefined : parent.left
                 anchors.right: isMyMessage ? parent.right : undefined
+
                 radius: 10
                 color: isMyMessage ? page.myMessageColor : page.serverMessageColor
                 property bool isMyMessage: model.sendBy === ws.myId
@@ -121,44 +122,47 @@ Window {
             }
         }
 
-        TextField {
-            id: writeMes
-            width: page.width - 100
-            height: 50
+        Row {
             x: page.x + 20
-            y: page.y + page.height - 75
-            wrapMode: Text.Wrap
+            y: viewMessage.y + viewMessage.height
 
-            background: Rectangle {
-                color: page.panelColor
-            }
+            TextField {
+                id: writeMes
+                width: page.width - 100
+                height: 50
+                wrapMode: Text.Wrap
 
-            color: page.textColor
-        }
-
-        Button {
-            id: send
-            text: qsTr("Send")
-            x: writeMes.x + writeMes.width + 10
-            y: writeMes.y
-            width: 50
-            height: writeMes.height
-
-            background: Rectangle {
-                color: page.myMessageColor
-            }
-
-            // Send message function
-            onClicked: {
-                var message = {
-                    type: "message",
-                    text: writeMes.text,
-                    sendBy: ws.myId
+                background: Rectangle {
+                    color: page.panelColor
                 }
 
-                ws.sendTextMessage(JSON.stringify(message))
-                writeMes.clear()
+                color: page.textColor
+            }
+
+            Button {
+                id: send
+                text: qsTr("Send")
+                width: 50
+                height: writeMes.height
+
+                background: Rectangle {
+                    color: page.myMessageColor
+                }
+
+                // Send message function
+                onClicked: {
+                    var message = {
+                        type: "message",
+                        text: writeMes.text,
+                        sendBy: ws.myId
+                    }
+
+                    ws.sendTextMessage(JSON.stringify(message))
+                    writeMes.clear()
+                }
             }
         }
+
+
     }
 }
