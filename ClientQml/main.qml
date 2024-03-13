@@ -76,39 +76,79 @@ Window {
             }
         }
 
-        ListView {
-            id: viewMessage
+        Column {
             x: connect.x
             y: connect.y + connect.height + 30
-            width: 500
-            height: 280
-            spacing: page.margin
-            ScrollBar.vertical: ScrollBar {
-                opacity: 0
+
+            ListView {
+                id: viewMessage
+                width: writeMes.x + writeMes.width
+                height: 280
+                spacing: page.margin
+                model: myModel
+
+                delegate: Rectangle {
+                    height: 40
+                    width: viewMessage.width-150
+                    anchors.left: isMyMessage ? undefined : parent.left
+                    anchors.right: isMyMessage ? parent.right : undefined
+                    radius: 10
+                    color: isMyMessage ? page.myMessageColor : page.serverMessageColor
+                    property bool isMyMessage: model.sendBy === ws.myId
+
+                    Label {
+                        text: 'id: ' + model.sendBy
+                        color: page.textColor
+                        x: 10
+                    }
+
+                    Label {
+                        y: 15
+                        x: 10
+                        text: model.text
+                        color: page.textColor
+                    }
+                }
             }
 
-            model: myModel
-            delegate: Rectangle {
-                height: 40
-                width: viewMessage.width-150
-                anchors.left: isMyMessage ? undefined : parent.left
-                anchors.right: isMyMessage ? parent.right : undefined
+            Row {
+                y: viewMessage.y + viewMessage.height
+                spacing: 5
 
-                radius: 10
-                color: isMyMessage ? page.myMessageColor : page.serverMessageColor
-                property bool isMyMessage: model.sendBy === ws.myId
+                TextField {
+                    id: writeMes
+                    width: page.width - 200
+                    height: 50
+                    wrapMode: Text.Wrap
 
-                Label {
-                    text: 'id: ' + model.sendBy
+                    background: Rectangle {
+                        color: page.panelColor
+                    }
+
                     color: page.textColor
-                    x: 10
                 }
 
-                Label {
-                    y: 15
-                    x: 10
-                    text: model.text
-                    color: page.textColor
+                Button {
+                    id: send
+                    text: qsTr("Send")
+                    width: 50
+                    height: writeMes.height
+
+                    background: Rectangle {
+                        color: page.myMessageColor
+                    }
+
+                    // Send message function
+                    onClicked: {
+                        var message = {
+                            type: "message",
+                            text: writeMes.text,
+                            sendBy: ws.myId
+                        }
+
+                        ws.sendTextMessage(JSON.stringify(message))
+                        writeMes.clear()
+                    }
                 }
             }
         }
@@ -121,48 +161,5 @@ Window {
                 sendBy: '128'
             }
         }
-
-        Row {
-            x: page.x + 20
-            y: viewMessage.y + viewMessage.height
-
-            TextField {
-                id: writeMes
-                width: page.width - 100
-                height: 50
-                wrapMode: Text.Wrap
-
-                background: Rectangle {
-                    color: page.panelColor
-                }
-
-                color: page.textColor
-            }
-
-            Button {
-                id: send
-                text: qsTr("Send")
-                width: 50
-                height: writeMes.height
-
-                background: Rectangle {
-                    color: page.myMessageColor
-                }
-
-                // Send message function
-                onClicked: {
-                    var message = {
-                        type: "message",
-                        text: writeMes.text,
-                        sendBy: ws.myId
-                    }
-
-                    ws.sendTextMessage(JSON.stringify(message))
-                    writeMes.clear()
-                }
-            }
-        }
-
-
     }
 }
