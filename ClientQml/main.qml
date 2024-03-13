@@ -76,63 +76,57 @@ Window {
             }
         }
 
-        Label {
-            id: chat
-            width: 500
-            height: 320
+        ListView {
+            id: viewMessage
             x: connect.x
             y: connect.y + connect.height + 30
-            wrapMode: Text.Wrap
-
-            ListView {
-                id: viewMessage
-                anchors.fill: parent
-                spacing: page.margin
-                ScrollBar.vertical: ScrollBar {
-                    opacity: 0
-                }
-
-                model: myModel
-                delegate: Rectangle {
-                    height: 40
-                    width: viewMessage.width-150
-                    anchors.left: isMyMessage ? undefined : parent.left
-                    anchors.right: isMyMessage ? parent.right : undefined
-                    radius: 10
-                    color: isMyMessage ? page.myMessageColor : page.serverMessageColor
-                    property bool isMyMessage: model.sendBy === ws.myId
-
-                    Label {
-                        text: 'id: ' + model.sendBy
-                        color: page.textColor
-                        x: 10
-                    }
-
-                    Label {
-                        y: 15
-                        x: 10
-                        text: model.text
-                        color: page.textColor
-                    }
-                }
+            width: 500
+            height: 320
+            spacing: page.margin
+            ScrollBar.vertical: ScrollBar {
+                opacity: 0
             }
 
-            ListModel {
-                id: myModel
+            model: myModel
+            delegate: Rectangle {
+                height: 40
+                width: viewMessage.width-150
+                anchors.left: isMyMessage ? undefined : parent.left
+                anchors.right: isMyMessage ? parent.right : undefined
+                radius: 10
+                color: isMyMessage ? page.myMessageColor : page.serverMessageColor
+                property bool isMyMessage: model.sendBy === ws.myId
 
-                ListElement {
-                    text: 'ban'
-                    sendBy: '128'
+                Label {
+                    text: 'id: ' + model.sendBy
+                    color: page.textColor
+                    x: 10
                 }
+
+                Label {
+                    y: 15
+                    x: 10
+                    text: model.text
+                    color: page.textColor
+                }
+            }
+        }
+
+        ListModel {
+            id: myModel
+
+            ListElement {
+                text: 'ban'
+                sendBy: '128'
             }
         }
 
         TextField {
             id: writeMes
-            width: chat.width - 100
+            width: page.width - 100
             height: 50
-            x: chat.x + 20
-            y: chat.y + chat.height - 75
+            x: page.x + 20
+            y: page.y + page.height - 75
             wrapMode: Text.Wrap
 
             background: Rectangle {
