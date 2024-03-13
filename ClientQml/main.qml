@@ -20,7 +20,7 @@ Window {
             var data = JSON.parse(message);
 
             if (data.type === 'connect') {
-                _ws.myId = data.data;
+                _ws.myId = data.data
             }
 
             else if(data.type === 'message') {
