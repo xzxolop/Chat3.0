@@ -40,6 +40,15 @@ Window {
         }
     }
 
+    ListModel {
+        id: _messageModel
+
+        ListElement {
+            text: 'ban'
+            sendBy: '128'
+        }
+    }
+
     Page {
         id: _page
         anchors.fill: parent
@@ -151,15 +160,6 @@ Window {
                         _writeMes.clear()
                     }
                 }
-            }
-        }
-
-        ListModel {
-            id: _messageModel
-
-            ListElement {
-                text: 'ban'
-                sendBy: '128'
             }
         }
     }
