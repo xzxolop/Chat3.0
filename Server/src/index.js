@@ -17,7 +17,7 @@ wss.on('connection', (ws) => {
     ws.send(Buffer.from(JSON.stringify({type: 'connect', data: id})));
     clients[id] = ws;
 
-    console.log('Client connected' + id);
+    console.log('Client connected ' + id);
     ws.send('Welcome! You are connect with id: ' + id); // пока отправляем только одному клиенту
     
     // recv
