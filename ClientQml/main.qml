@@ -97,26 +97,29 @@ Window {
                 spacing: _page.margin
                 model: _messageModel
 
-                delegate: Rectangle {
+                delegate: Item {
                     height: 40
                     width: viewMessage.width-150
-                    anchors.left: isMyMessage ? undefined : parent.left
-                    anchors.right: isMyMessage ? parent.right : undefined
-                    radius: 10
-                    color: isMyMessage ? _page.myMessageColor : _page.serverMessageColor
-                    property bool isMyMessage: model.sendBy === _ws.myId
+                        Rectangle {
+                        property bool isMyMessage: model.sendBy === _ws.myId
+                        x: isMyMessage ? _writeMes.x + _writeMes.width - width : 0
+                        height: 40
+                        width: viewMessage.width-150
+                        radius: 10
+                        color: isMyMessage ? _page.myMessageColor : _page.serverMessageColor
 
-                    Label {
-                        x: 10
-                        color: _page.textColor
-                        text: 'id: ' + model.sendBy
-                    }
+                        Label {
+                            x: 10
+                            color: _page.textColor
+                            text: 'id: ' + model.sendBy
+                        }
 
-                    Label {
-                        x: 10
-                        y: 15
-                        color: _page.textColor
-                        text: model.text
+                        Label {
+                            x: 10
+                            y: 15
+                            color: _page.textColor
+                            text: model.text
+                        }
                     }
                 }
             }
